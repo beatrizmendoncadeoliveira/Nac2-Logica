@@ -1,0 +1,225 @@
+import java.util.Scanner;
+
+public class NAC {
+
+	public static void main(String[] args) {
+		Scanner scanner = new Scanner(System.in);
+		// TODO Auto-generated method stub
+		boolean cad_func=true, cad_prod=true;
+		int opcao=0, qtde=0,x=0;
+		//Produtos
+		int cod_prod [] = new int [10];
+		String nome_prod[] = new String[10];
+		double val_unit_prod[] = new double[10];
+		//Funcionarios
+		int cod_func[] = new int [5];
+		String nome_func[] = new String[5];
+		//Vender
+		int cod_prod_vend [] = new int [100];
+		int qtde_vend[] = new int[100];
+		int cod_func_vend[] = new int [100];
+		
+do {
+		System.out.println("Menu de opções");
+		System.out.println("1 - Cadastrar Funcionário");
+		System.out.println("2 - Cadastrar Produtos");
+		System.out.println("3 - Vender Produtos");
+		System.out.println("4 - Listar Produtos Vendidos");
+		System.out.println("5 - Sair");
+		System.out.println("********************************");
+		opcao = scanner.nextInt();
+		switch (opcao){
+		case 1:
+		{
+		if(cad_func) {
+		    cadastrar_funcionario(cod_func,nome_func);
+		    cad_func=false;
+		}
+		else
+			System.out.println("Limite atingido!");
+		break;
+		}
+		case 2:
+		{
+		if(cad_prod) {
+			cadastrar_produtos(cod_prod, nome_prod, val_unit_prod);
+			cad_prod=false;
+		}
+		else
+			System.out.println("Limite atingido!");
+		break;
+		}
+		case 3:
+		{
+			qtde = vender_produtos(cod_prod, nome_prod, val_unit_prod, cod_func, nome_func, cod_prod_vend, qtde_vend, cod_func_vend,qtde);
+		
+		break;
+		}
+		case 4:
+		{
+		
+		  listar_produtos_vendidos(cod_prod,nome_prod, val_unit_prod,cod_func, nome_func, cod_prod_vend, qtde_vend, cod_func_vend, qtde);
+		
+		break;
+		}	
+		case 5:
+		{
+		
+			System.out.println("Obrigado!");
+		
+		break;
+		}
+		default:
+			System.out.println("Opção Inválida.");
+		}
+}while(opcao!=5);
+	}
+
+
+static void cadastrar_funcionario(int cod_func[], String nome_func[])
+{   Scanner scanner = new Scanner(System.in);
+	int codigo=0;
+	boolean encontrou=false;
+	for(int i=0; i<5; i++)
+	{
+		do {
+		encontrou=false;
+		System.out.println("Entre com o código do "+(i+1)+"o. funcionario: ");
+		codigo=scanner.nextInt();
+		for(int j=0; j<i && encontrou==false; j++)
+		{
+			if(codigo==cod_func[j])
+				encontrou=true;
+		}
+		if(!encontrou) {
+	       cod_func[i] = codigo;
+		}
+		else {
+			System.out.println("Código do funcionário já existe. Digite novamente!");		
+		}
+		}while(encontrou);
+
+		System.out.println("Entre com o nome do "+(i+1)+"o. funcionario: ");
+		nome_func[i] = scanner.next();
+	}
+	
+}
+
+static void cadastrar_produtos(int cod_prod[], String nome_prod[], double val_unit_prod[])
+{   Scanner scanner = new Scanner(System.in);
+	int codigo=0;
+	boolean encontrou=false;
+	for(int i=0; i<10; i++)
+	{
+	  do {
+		encontrou=false;
+		System.out.println("Entre com o código do "+(i+1)+"o. produto: ");
+		codigo=scanner.nextInt();
+		for(int j=0; j<i && encontrou==false; j++)
+		{
+			if(codigo==cod_prod[j])
+				encontrou=true;
+		}
+		if(!encontrou) {
+	       cod_prod[i] = codigo;
+		}
+		else {
+			System.out.println("Código do funcionário já existe. Digite novamente!");		
+		}
+		}while(encontrou);
+
+		System.out.println("Entre com a descrição do "+(i+1)+"o. produto: ");
+		nome_prod[i] = scanner.next();
+		System.out.println("Entre com o valor unitário do "+(i+1)+"o. produto: ");
+		val_unit_prod[i] = scanner.nextDouble();
+		
+	}
+	
+}
+static int vender_produtos(int cod_prod[], String nome_prod[], double val_unit_prod[], int cod_func[], String nome_func[], int cod_prod_vend[], int qtde_vend[], int cod_func_vend[], int x)
+{   Scanner scanner = new Scanner(System.in);
+		
+	    int produto=0, funcionario=0;
+		double quantidade=0;
+		boolean encontrou=false;
+		if(x<200)
+		{
+		do {
+		System.out.println("Entre com o código do produto que deseja vender: ");
+		produto = scanner.nextInt();
+		for(int i=0; i<10 && encontrou==false; i++) {
+			if(produto == cod_prod[i])
+				encontrou = true;
+		}
+		if(!encontrou)
+			System.out.println("Código inválido. Digite novamente!");			
+		}while(!encontrou);
+		
+		encontrou=false;
+		cod_prod_vend[x]=produto;
+		do {
+		    System.out.println("Entre com o código do funcionário que vendeu o produto: ");
+			funcionario = scanner.nextInt();
+			for(int i=0; i<5 && encontrou==false; i++) {
+				if(funcionario == cod_func[i])
+					encontrou = true;
+				
+			}
+			if(!encontrou)
+				System.out.println("Código de funcionário inválido. Digite novamente!");
+		}while(!encontrou);
+		cod_func_vend[x]=funcionario;
+		do {
+		System.out.println("Entre com a quantidade vendida do produto: ");
+		qtde_vend[x]=scanner.nextInt();
+		if(qtde_vend[x]<0)
+			System.out.println("Quantidade vendida inválida. Digite novamente!");	
+		}while(qtde_vend[x]<0);	
+		
+		x++;
+
+		}
+		else
+			System.out.println("Limite atingido!");
+					   
+		return x;
+}
+
+
+static void listar_produtos_vendidos(int cod_prod[], String nome_prod[], double val_unit_prod[], int cod_func[], String nome_func[], int cod_prod_vend[], int qtde_vend[], int cod_func_vend[], int qtde)
+{   Scanner scanner = new Scanner(System.in);
+	boolean encontrou=false, achou=false;
+	int cod_vendedor=0,contador=0, cod_produto=0, ccod_func=0;
+	int i=0,k, j, aux1,aux2,aux3;
+
+	   for (k = 1; k <= qtde - 1; k++)
+	   {
+	      aux1 = cod_func_vend[k];
+	      aux2 = qtde_vend[k];
+	      aux3 = cod_prod_vend[k];
+	      j = k - 1;
+	      while (j >= 0 && aux1 < cod_func_vend[j]) {
+	         cod_func_vend[j+1] = cod_func_vend[j];
+	         j--;
+	      }
+
+	      cod_func_vend[j+1] = aux1;
+	      qtde_vend[j+1]=aux2;
+	      cod_prod_vend[j+1]=aux3;
+	   }
+	   while(i<qtde){
+		   System.out.println("Código do funcionário: "+cod_func_vend[i]);
+		   ccod_func=cod_func_vend[i];
+		   while(ccod_func==cod_func_vend[i])
+		   {
+		   System.out.println("Quantidade Vendida: "+qtde_vend[i]);
+		   System.out.println("Código do Produto Vendido: "+cod_prod_vend[i]);
+		   System.out.println("*******************************************");
+		   i++;
+		   }
+		   System.out.println("*******************************************");
+		   System.out.println("*******************************************");
+	}
+		   
+}
+}
